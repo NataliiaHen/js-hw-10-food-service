@@ -13,12 +13,18 @@ const Theme = {
   DARK: 'dark-theme',
 };
 
-const lightTheme = Theme.LIGHT;
-const darkTheme = Theme.DARK;
+const localTheme = localStorage.getItem('theme');
+if (localTheme) {
+  body.classList.add(localTheme);
+}
+
+if (body.classList.contains(Theme.DARK)) {
+  themeSwitchToggle.checked = true;
+}
 
 const setInitialTheme = e => {
-  body.classList.add(lightTheme);
-  localStorage.setItem('theme', lightTheme);
+  body.classList.add(Theme.LIGHT);
+  localStorage.setItem('theme', Theme.LIGHT);
 };
 
 const setTheme = (newTheme, currentTheme) => {
@@ -28,31 +34,19 @@ const setTheme = (newTheme, currentTheme) => {
   localStorage.setItem('theme', newTheme);
 };
 
-const getLokalTheme = () => {
-  return localStorage.getItem('theme');
-};
-
-const currentLocalTheme = getLokalTheme();
-body.classList.add(currentLocalTheme);
-
-if (body.classList.contains(darkTheme)) {
-  themeSwitchToggle.checked = true;
-}
-
 themeSwitchToggle.addEventListener('change', e => {
-  e.preventDefault();
-  const localTheme = getLokalTheme();
-
+  console.log(localTheme);
   switch (localTheme) {
-    case lightTheme:
-      setTheme(darkTheme, lightTheme);
+    case Theme.LIGHT:
+      setTheme(Theme.LIGHT, Theme.DARK);
       break;
 
-    case darkTheme:
-      setTheme(lightTheme, darkTheme);
+    case Theme.DARK:
+      setTheme(Theme.DARK, Theme.LIGHT);
       break;
 
     default:
       setInitialTheme();
+      break;
   }
 });
